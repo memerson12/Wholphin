@@ -12,10 +12,9 @@ import com.github.damontecres.wholphin.ui.detail.CardGridItem
 import com.github.damontecres.wholphin.ui.detail.music.artistsString
 import com.github.damontecres.wholphin.ui.detail.series.SeasonEpisodeIds
 import com.github.damontecres.wholphin.ui.dot
-import com.github.damontecres.wholphin.ui.formatDateTime
 import com.github.damontecres.wholphin.ui.formatDuration
 import com.github.damontecres.wholphin.ui.formatEpisodeNumber
-import com.github.damontecres.wholphin.ui.getDateFormatter
+import com.github.damontecres.wholphin.ui.formatPremiereDate
 import com.github.damontecres.wholphin.ui.joinNotBlank
 import com.github.damontecres.wholphin.ui.nav.Destination
 import com.github.damontecres.wholphin.ui.playback.playable
@@ -78,7 +77,7 @@ data class BaseItem(
             buildList {
                 add(data.seasonEpisodePadded)
                 add(data.name)
-                add(data.premiereDate?.let { formatDateTime(it) })
+                add(data.premiereDate?.let { formatPremiereDate(it) })
             }.joinNotBlank(" - ")
         } else {
             data.productionYear?.toString()
@@ -115,7 +114,7 @@ data class BaseItem(
             episodeCornerText =
                 if (type == BaseItemKind.EPISODE) {
                     data.indexNumber?.let { formatEpisodeNumber(it) }
-                        ?: data.premiereDate?.let(::formatDateTime)
+                        ?: data.premiereDate?.let(::formatPremiereDate)
                 } else {
                     null
                 },
@@ -149,11 +148,7 @@ data class BaseItem(
                                         BaseItemKind.EPISODE -> {
                                             data.seasonEpisode?.let(::add)
                                             data.premiereDate?.let {
-                                                add(
-                                                    getDateFormatter().format(
-                                                        it,
-                                                    ),
-                                                )
+                                                add(formatPremiereDate(it))
                                             }
                                         }
 
@@ -193,7 +188,7 @@ data class BaseItem(
                                                 // TV episode
                                                 data.seasonEpisode?.let(::add)
                                                 data.premiereDate?.let {
-                                                    add(getDateFormatter().format(it))
+                                                    add(formatPremiereDate(it))
                                                 }
                                             } else {
                                                 data.productionYear?.let { add(it.toString()) }

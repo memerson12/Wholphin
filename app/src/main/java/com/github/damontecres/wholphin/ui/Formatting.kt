@@ -60,13 +60,15 @@ fun getDateFormatter(): DateTimeFormatter {
     return dateFormatter
 }
 
-// TODO server returns in UTC, but sdk converts to local time
-// eg 2020-02-14T00:00:00.0000000Z => 2020-02-13T17:00:00 PT => Feb 13, 2020
-
 /**
  * Format a [LocalDateTime] as `Aug 24, 2000`
  */
 fun formatDateTime(dateTime: LocalDateTime): String = getDateFormatter().format(dateTime)
+
+/**
+ * Format a premiere/air date after undoing the SDK's conversion to the device timezone.
+ */
+fun formatPremiereDate(dateTime: LocalDateTime): String = getDateFormatter().format(dateTime.toPremiereDate())
 
 fun formatDate(dateTime: LocalDate): String = getDateFormatter().format(dateTime)
 
